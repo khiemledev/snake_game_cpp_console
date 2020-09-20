@@ -51,6 +51,7 @@ vector<Point> snake = {
 };
 Direction direction = Direction::right;
 Point apple;
+int score = 0;
 
 /*
  * Prototype
@@ -67,6 +68,7 @@ void drawHeadnTail();
 void genApple();
 bool isAteApple();
 void growing();
+void displayScore();
 
 
 /*
@@ -79,6 +81,7 @@ int main()
 	drawBox();
 	drawSnake();
 	genApple();
+	displayScore();
 
 	while (true)
 	{
@@ -101,6 +104,8 @@ int main()
 		drawHeadnTail();
 		if (isAteApple())
 		{
+			score++;
+			displayScore();
 			growing();
 			genApple();
 		}
@@ -160,6 +165,12 @@ void genApple()
 bool isAteApple()
 {
 	return snake[0].x == apple.x && snake[0].y == apple.y;
+}
+
+void displayScore()
+{
+	gotoxy(WIDTH + 5, 2);
+	cout << "Your score: " << score;
 }
 
 /*
