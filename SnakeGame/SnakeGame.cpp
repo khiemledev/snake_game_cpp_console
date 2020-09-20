@@ -60,6 +60,7 @@ void move();
 void drawBox();
 bool isHitWall();
 bool isBiteItself();
+void drawHeadnTail();
 
 
 /*
@@ -68,6 +69,9 @@ bool isBiteItself();
 int main()
 {
 	ShowConsoleCursor(false);
+
+	drawBox();
+	drawSnake();
 
 	while (true)
 	{
@@ -87,14 +91,12 @@ int main()
 				break;
 		}
 		move();
+		drawHeadnTail();
 		if (isBiteItself())
 			break;
 		if (isHitWall())
 			break;
-		drawBox();
-		drawSnake();
 		Sleep(REFRESH_RATE);
-		system("cls");
 	}
 	drawSnake();
 
@@ -161,6 +163,15 @@ void move()
 		snake[0].x -= 1;
 	else if (direction == Direction::right)
 		snake[0].x += 1;
+}
+
+void drawHeadnTail()
+{
+	gotoxy(snake[0].x, snake[0].y);
+	cout << BODY;
+	Point tail = snake.back();
+	gotoxy(tail.x, tail.y);
+	cout << ' '; // Clear the old tail
 }
 
 bool isBiteItself()
