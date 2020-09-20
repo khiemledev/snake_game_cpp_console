@@ -59,6 +59,7 @@ void ShowConsoleCursor(bool);
 void move();
 void drawBox();
 bool isHitWall();
+bool isBiteItself();
 
 
 /*
@@ -86,6 +87,8 @@ int main()
 				break;
 		}
 		move();
+		if (isBiteItself())
+			break;
 		if (isHitWall())
 			break;
 		drawBox();
@@ -158,6 +161,15 @@ void move()
 		snake[0].x -= 1;
 	else if (direction == Direction::right)
 		snake[0].x += 1;
+}
+
+bool isBiteItself()
+{
+	Point head = snake[0];
+	for (size_t i = 1; i < snake.size(); i++)
+		if (head.x == snake[i].x && head.y == snake[i].y)
+			return true;
+	return false;
 }
 
 /*
