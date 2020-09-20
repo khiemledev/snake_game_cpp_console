@@ -8,6 +8,8 @@ using namespace std;
 #include <windows.h>
 #include <conio.h>
 #include <cstring>
+#include <time.h>
+#include <random>
 
 /*
  * MACRO
@@ -16,6 +18,7 @@ using namespace std;
 #define HEIGHT 20
 #define BODY '*'
 #define REFRESH_RATE 300
+#define APPLE 'O'
 
 /*
  * Enum
@@ -47,7 +50,7 @@ vector<Point> snake = {
 	Point{ WIDTH / 2 - 2, HEIGHT / 2 }
 };
 Direction direction = Direction::right;
-
+Point apple;
 
 /*
  * Prototype
@@ -61,6 +64,9 @@ void drawBox();
 bool isHitWall();
 bool isBiteItself();
 void drawHeadnTail();
+void genApple();
+bool isAteApple();
+void growing();
 
 
 /*
@@ -72,6 +78,7 @@ int main()
 
 	drawBox();
 	drawSnake();
+	genApple();
 
 	while (true)
 	{
@@ -92,6 +99,11 @@ int main()
 		}
 		move();
 		drawHeadnTail();
+		if (isAteApple())
+		{
+			growing();
+			genApple();
+		}
 		if (isBiteItself())
 			break;
 		if (isHitWall())
@@ -132,6 +144,23 @@ bool isHitWall()
 	return snake[0].x == 0 || snake[0].y == 0 || snake[0].x == WIDTH || snake[0].y == HEIGHT;
 }
 
+void genApple()
+{
+	srand(time(0));
+	int x = rand() % (WIDTH - 1) + 1;
+	int y = rand() % (HEIGHT - 1) + 1;
+	apple = {
+		x,
+		y,
+	};
+	gotoxy(x, y);
+	cout << APPLE;
+}
+
+bool isAteApple()
+{
+	return snake[0].x == apple.x && snake[0].y == apple.y;
+}
 
 /*
  * Snake functions
@@ -181,6 +210,20 @@ bool isBiteItself()
 		if (head.x == snake[i].x && head.y == snake[i].y)
 			return true;
 	return false;
+}
+
+void growing()
+{
+	Point tail = snake.back();
+	if (direction == Direction::up)
+		tail.y -= 1;
+	else if (direction == Direction::down)
+		tail.y += 1;
+	else if (direction == Direction::left)
+		tail.x += 1;
+	else if (direction == Direction::right)
+		tail.x -= 1;
+	snake.push_back(tail);
 }
 
 /*
