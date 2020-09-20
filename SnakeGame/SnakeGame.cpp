@@ -58,6 +58,7 @@ void gotoxy(int, int);
 void ShowConsoleCursor(bool);
 void move();
 void drawBox();
+bool isHitWall();
 
 
 /*
@@ -85,6 +86,8 @@ int main()
 				break;
 		}
 		move();
+		if (isHitWall())
+			break;
 		drawBox();
 		drawSnake();
 		Sleep(REFRESH_RATE);
@@ -117,6 +120,11 @@ void drawBox()
 		gotoxy(WIDTH, i);
 		cout << '|';
 	}
+}
+
+bool isHitWall()
+{
+	return snake[0].x == 0 || snake[0].y == 0 || snake[0].x == WIDTH || snake[0].y == HEIGHT;
 }
 
 
