@@ -6,6 +6,8 @@ using namespace std;
  */
 #include <vector>
 #include <windows.h>
+#include <conio.h>
+#include <cstring>
 
 /*
  * MACRO
@@ -13,6 +15,18 @@ using namespace std;
 #define WIDTH 40
 #define HEIGHT 20
 #define BODY '*'
+#define REFRESH_RATE 300
+
+/*
+ * Enum
+ */
+enum class Direction
+{
+	up,
+	right,
+	down,
+	left
+};
 
 // Each point is a part of the snake
 struct Point
@@ -32,6 +46,7 @@ vector<Point> snake = {
 	Point{ WIDTH / 2, HEIGHT / 2 },
 	Point{ WIDTH / 2 - 2, HEIGHT / 2 }
 };
+Direction direction = Direction::right;
 
 
 /*
@@ -41,6 +56,7 @@ void drawSnakePart(Point);
 void drawSnake();
 void gotoxy(int, int);
 void ShowConsoleCursor(bool);
+void move();
 
 
 /*
@@ -50,6 +66,28 @@ int main()
 {
 	ShowConsoleCursor(false);
 
+	while (true)
+	{
+		if (_kbhit())
+		{
+			char ch = _getch();
+			ch = tolower(ch);
+			if (ch == 'a')
+				direction = Direction::left;
+			else if (ch == 'w')
+				direction = Direction::up;
+			else if (ch == 's')
+				direction = Direction::down;
+			else if (ch == 'd')
+				direction = Direction::right;
+			else if (ch == 'q') // Quit game
+				break;
+		}
+		move();
+		drawSnake();
+		Sleep(REFRESH_RATE);
+		system("cls");
+	}
 	drawSnake();
 
 	ShowConsoleCursor(true);
@@ -72,6 +110,21 @@ void drawSnake()
 {
 	for (size_t i = 0; i < snake.size(); i++)
 		drawSnakePart(snake[i]);
+}
+
+// move the snake
+void move()
+{
+	for (size_t i = snake.size() - 1; i > 0; i--)
+		snake[i] = snake[i - 1];
+	if (direction == Direction::up)
+		snake[0].y -= 1;
+	else if (direction == Direction::down)
+		snake[0].y += 1;
+	else if (direction == Direction::left)
+		snake[0].x -= 1;
+	else if (direction == Direction::right)
+		snake[0].x += 1;
 }
 
 /*
