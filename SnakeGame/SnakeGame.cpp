@@ -73,13 +73,13 @@ int main()
 		{
 			char ch = _getch();
 			ch = tolower(ch);
-			if (ch == 'a')
+			if (ch == 'a' && direction != Direction::right)
 				direction = Direction::left;
-			else if (ch == 'w')
+			else if (ch == 'w' && direction != Direction::down)
 				direction = Direction::up;
-			else if (ch == 's')
+			else if (ch == 's' && direction != Direction::up)
 				direction = Direction::down;
-			else if (ch == 'd')
+			else if (ch == 'd' && direction != Direction::left)
 				direction = Direction::right;
 			else if (ch == 'q') // Quit game
 				break;
