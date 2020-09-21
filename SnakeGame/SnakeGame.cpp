@@ -72,6 +72,7 @@ void displayScore();
 void showEndMenu();
 void startGame();
 void resetSnake();
+void showStartMenu();
 
 
 /*
@@ -79,7 +80,7 @@ void resetSnake();
  */
 int main()
 {
-	startGame();
+	showStartMenu();
 	return 0;
 }
 
@@ -179,7 +180,10 @@ void startGame()
 			else if (ch == 'd' && direction != Direction::left)
 				direction = Direction::right;
 			else if (ch == 'q') // Quit game
+			{
+				showEndMenu();
 				break;
+			}
 		}
 		move();
 		drawHeadnTail();
@@ -218,6 +222,27 @@ void resetSnake()
 		Point{ WIDTH / 2, HEIGHT / 2 },
 		Point{ WIDTH / 2 - 2, HEIGHT / 2 }
 	};
+}
+
+void showStartMenu()
+{
+	system("cls");
+	cout << "Welcome to snake game!" << endl;
+	cout << "Options:" << endl;
+	cout << "1. Start" << endl;
+	cout << "2. Quit" << endl;
+	cout << "Your choice: ";
+	int option;
+	cin >> option;
+	if (option == 1)
+	{
+		system("cls");
+		cout << "Tip: While playing game, you can press 'q' to quit";
+		Sleep(3000);
+		startGame();
+	}
+	else if (option == 2)
+		exit(1);
 }
 
 /*
