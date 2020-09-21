@@ -37,9 +37,8 @@ struct Point
 	int y;
 };
 
-/*
- * Global variables
- */
+
+#pragma region GlobalVariable
 // Create snake
 vector<Point> snake = {
 	Point{ WIDTH / 2 + 2, HEIGHT / 2 },
@@ -53,10 +52,10 @@ Point apple;
 int score = 0;
 int speed = 300;
 Point prevTail;
+#pragma endregion
 
-/*
- * Prototype
- */
+
+#pragma region Prototype
 void drawSnakePart(Point);
 void drawSnake();
 void gotoxy(int, int);
@@ -74,6 +73,8 @@ void showEndMenu();
 void startGame();
 void resetSnake();
 void showStartMenu();
+#pragma endregion
+
 
 
 /*
@@ -86,9 +87,8 @@ int main()
 }
 
 
-/*
- * Game functions
- */
+#pragma region GameFunction
+// Draw snakeboard with WIDTH and HEIGHT was set
 void drawBox()
 {
 	for (size_t i = 0; i < WIDTH; i++)
@@ -108,11 +108,13 @@ void drawBox()
 	}
 }
 
+// Check if the snake hit the wall
 bool isHitWall()
 {
 	return snake[0].x == 0 || snake[0].y == 0 || snake[0].x == WIDTH || snake[0].y == HEIGHT;
 }
 
+// Generate apple on the board
 void genApple()
 {
 	srand(time(0));
@@ -126,17 +128,21 @@ void genApple()
 	cout << APPLE;
 }
 
+// Check if the snake ate apple
 bool isAteApple()
 {
 	return snake[0].x == apple.x && snake[0].y == apple.y;
 }
 
+// Show score on right side of the board
 void displayScore()
 {
 	gotoxy(WIDTH + 5, 2);
 	cout << "Your score: " << score;
 }
 
+
+// Show menu at the end of the game
 void showEndMenu()
 {
 	system("cls");
@@ -209,7 +215,6 @@ void startGame()
 		}
 		Sleep(speed);
 	}
-	drawSnake();
 }
 
 void resetSnake()
@@ -225,6 +230,7 @@ void resetSnake()
 	};
 }
 
+// Show at the begining of the game
 void showStartMenu()
 {
 	system("cls");
@@ -241,19 +247,30 @@ void showStartMenu()
 		cout << "Choose your level (1 - 5): ";
 		int t;
 		cin >> t;
-		speed = 600 - t * 100;
+		speed = 600 - t * 100; // Calculate speed depend on level
 		system("cls");
 		cout << "Tip: While playing game, you can press 'q' to quit";
-		Sleep(3000);
+		gotoxy(0, 3);
+		cout << "Ready!";
+		Sleep(1000);
+		for (size_t i = 3; i > 0; i--)
+		{
+			gotoxy(0, 3);
+			cout << i << "         ";
+			Sleep(1000);
+		}
+		gotoxy(0, 3);
+		cout << "GO!";
+		Sleep(1000);
 		startGame();
 	}
 	else if (option == 2)
 		exit(1);
 }
+#pragma endregion
 
-/*
- * Snake functions
- */
+
+#pragma region SnakeFunction
 // Draw a part of snake
 void drawSnakePart(Point p)
 {
@@ -284,6 +301,7 @@ void move()
 		snake[0].x += 1;
 }
 
+// Redraw head & tail to make the snake move
 void drawHeadnTail()
 {
 	gotoxy(snake[0].x, snake[0].y);
@@ -292,6 +310,7 @@ void drawHeadnTail()
 	cout << ' '; // Clear the old tail
 }
 
+// Check if snake bite itself
 bool isBiteItself()
 {
 	Point head = snake[0];
@@ -301,6 +320,7 @@ bool isBiteItself()
 	return false;
 }
 
+// Growing snake when it ate an apple
 void growing()
 {
 	Point tail = snake.back();
@@ -314,10 +334,10 @@ void growing()
 		tail.x -= 1;
 	snake.push_back(tail);
 }
+#pragma endregion
 
-/*
- * Console functions
- */
+
+#pragma region ConsoleFunction
 // Goto position (x, y)
 void gotoxy(int x, int y)
 {
@@ -339,3 +359,4 @@ void ShowConsoleCursor(bool showFlag)
 	cursorInfo.bVisible = showFlag;
 	SetConsoleCursorInfo(out, &cursorInfo);
 }
+#pragma endregion
