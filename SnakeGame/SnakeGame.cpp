@@ -17,7 +17,6 @@ using namespace std;
 #define WIDTH 40
 #define HEIGHT 20
 #define BODY '*'
-#define REFRESH_RATE 300
 #define APPLE 'O'
 
 /*
@@ -46,12 +45,14 @@ vector<Point> snake = {
 	Point{ WIDTH / 2 + 2, HEIGHT / 2 },
 	Point{ WIDTH / 2 + 1, HEIGHT / 2 },
 	Point{ WIDTH / 2, HEIGHT / 2 },
-	Point{ WIDTH / 2, HEIGHT / 2 },
+	Point{ WIDTH / 2 - 1, HEIGHT / 2 },
 	Point{ WIDTH / 2 - 2, HEIGHT / 2 }
 };
 Direction direction = Direction::right;
 Point apple;
 int score = 0;
+int speed = 300;
+Point prevTail;
 
 /*
  * Prototype
@@ -206,7 +207,7 @@ void startGame()
 			showEndMenu();
 			break;
 		}
-		Sleep(REFRESH_RATE);
+		Sleep(speed);
 	}
 	drawSnake();
 }
@@ -219,7 +220,7 @@ void resetSnake()
 		Point{ WIDTH / 2 + 2, HEIGHT / 2 },
 		Point{ WIDTH / 2 + 1, HEIGHT / 2 },
 		Point{ WIDTH / 2, HEIGHT / 2 },
-		Point{ WIDTH / 2, HEIGHT / 2 },
+		Point{ WIDTH / 2 - 1, HEIGHT / 2 },
 		Point{ WIDTH / 2 - 2, HEIGHT / 2 }
 	};
 }
@@ -236,6 +237,11 @@ void showStartMenu()
 	cin >> option;
 	if (option == 1)
 	{
+		system("cls");
+		cout << "Choose your level (1 - 5): ";
+		int t;
+		cin >> t;
+		speed = 600 - t * 100;
 		system("cls");
 		cout << "Tip: While playing game, you can press 'q' to quit";
 		Sleep(3000);
@@ -265,6 +271,7 @@ void drawSnake()
 // move the snake
 void move()
 {
+	prevTail = snake.back();
 	for (size_t i = snake.size() - 1; i > 0; i--)
 		snake[i] = snake[i - 1];
 	if (direction == Direction::up)
@@ -281,8 +288,7 @@ void drawHeadnTail()
 {
 	gotoxy(snake[0].x, snake[0].y);
 	cout << BODY;
-	Point tail = snake.back();
-	gotoxy(tail.x, tail.y);
+	gotoxy(prevTail.x, prevTail.y);
 	cout << ' '; // Clear the old tail
 }
 
