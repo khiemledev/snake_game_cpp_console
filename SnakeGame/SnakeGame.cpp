@@ -69,6 +69,9 @@ void genApple();
 bool isAteApple();
 void growing();
 void displayScore();
+void showEndMenu();
+void startGame();
+void resetSnake();
 
 
 /*
@@ -76,50 +79,7 @@ void displayScore();
  */
 int main()
 {
-	ShowConsoleCursor(false);
-
-	drawBox();
-	drawSnake();
-	genApple();
-	displayScore();
-
-	while (true)
-	{
-		if (_kbhit())
-		{
-			char ch = _getch();
-			ch = tolower(ch);
-			if (ch == 'a' && direction != Direction::right)
-				direction = Direction::left;
-			else if (ch == 'w' && direction != Direction::down)
-				direction = Direction::up;
-			else if (ch == 's' && direction != Direction::up)
-				direction = Direction::down;
-			else if (ch == 'd' && direction != Direction::left)
-				direction = Direction::right;
-			else if (ch == 'q') // Quit game
-				break;
-		}
-		move();
-		drawHeadnTail();
-		if (isAteApple())
-		{
-			score++;
-			displayScore();
-			growing();
-			genApple();
-		}
-		if (isBiteItself())
-			break;
-		if (isHitWall())
-			break;
-		Sleep(REFRESH_RATE);
-	}
-	drawSnake();
-
-	ShowConsoleCursor(true);
-	// Reset the cursor to the end
-	gotoxy(0, HEIGHT + 1);
+	startGame();
 	return 0;
 }
 
@@ -173,6 +133,91 @@ void displayScore()
 {
 	gotoxy(WIDTH + 5, 2);
 	cout << "Your score: " << score;
+}
+
+void showEndMenu()
+{
+	system("cls");
+	gotoxy(0, 0);
+	cout << "End game!" << endl;
+	cout << "Your score: " << score << endl;
+	cout << "Do you want to play again ([y]/[n]): ";
+	char option;
+	cin >> option;
+	option = tolower(option);
+	if (option == 'y')
+	{
+		resetSnake();
+		startGame();
+	}
+	else if (option == 'n')
+		exit(1);
+}
+
+void startGame()
+{
+	system("cls");
+	ShowConsoleCursor(false);
+
+	drawBox();
+	drawSnake();
+	genApple();
+	displayScore();
+
+	while (true)
+	{
+		if (_kbhit())
+		{
+			char ch = _getch();
+			ch = tolower(ch);
+			if (ch == 'a' && direction != Direction::right)
+				direction = Direction::left;
+			else if (ch == 'w' && direction != Direction::down)
+				direction = Direction::up;
+			else if (ch == 's' && direction != Direction::up)
+				direction = Direction::down;
+			else if (ch == 'd' && direction != Direction::left)
+				direction = Direction::right;
+			else if (ch == 'q') // Quit game
+				break;
+		}
+		move();
+		drawHeadnTail();
+		if (isAteApple())
+		{
+			score++;
+			displayScore();
+			growing();
+			genApple();
+		}
+		if (isBiteItself())
+		{
+			ShowConsoleCursor(true);
+			showEndMenu();
+			break;
+		}
+		if (isHitWall())
+		{
+			ShowConsoleCursor(true);
+			showEndMenu();
+			break;
+		}
+		Sleep(REFRESH_RATE);
+	}
+	drawSnake();
+}
+
+void resetSnake()
+{
+	score = 0;
+	direction = Direction::right;
+	snake = {
+		Point{ WIDTH / 2 + 2, HEIGHT / 2 },
+		Point{ WIDTH / 2 + 1, HEIGHT / 2 },
+		Point{ WIDTH / 2, HEIGHT / 2 },
+		Point{ WIDTH / 2, HEIGHT / 2 },
+		Point{ WIDTH / 2 - 2, HEIGHT / 2 }
+	};
 }
 
 /*
