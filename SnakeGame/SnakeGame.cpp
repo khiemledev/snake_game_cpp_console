@@ -118,6 +118,8 @@ int main()
 	drawSnake();
 
 	ShowConsoleCursor(true);
+	// Reset the cursor to the end
+	gotoxy(0, HEIGHT + 1);
 	return 0;
 }
 
