@@ -323,16 +323,7 @@ bool isBiteItself()
 // Growing snake when it ate an apple
 void growing()
 {
-	Point tail = snake.back();
-	if (direction == Direction::up)
-		tail.y -= 1;
-	else if (direction == Direction::down)
-		tail.y += 1;
-	else if (direction == Direction::left)
-		tail.x += 1;
-	else if (direction == Direction::right)
-		tail.x -= 1;
-	snake.push_back(tail);
+	snake.push_back(prevTail);
 }
 #pragma endregion
 
